@@ -91,6 +91,21 @@ Phase 5 adds the historical matching engine:
 
 The matcher does not mix event types unless a future explicit fallback layer is added.
 
+## Phase 6 Scope
+
+Phase 6 adds the statistics engine:
+
+- win rate
+- mean, median, standard deviation
+- P10/P25/P50/P75/P90 percentiles
+- median MFE and median MAE
+- bootstrap confidence intervals for win rate and median return
+- historical confidence labels
+- historical impact score from `-100` to `+100`
+- `historical_statistics` upsert storage
+
+Confidence intervals and impact score are runtime report fields. The database stores the fields defined in the Phase 1 schema.
+
 ## Local Setup
 
 ```bash

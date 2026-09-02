@@ -19,8 +19,17 @@ from app.services.historical_matcher import (
 from app.services.market_data import MarketDataIngestionService
 from app.services.reaction_engine import ReactionCalculationError, ReactionEngine
 from app.services.reaction_metrics import ReactionMetrics
+from app.services.statistics import (
+    StatisticsCalculationError,
+    StatisticsService,
+    impact_score,
+    impact_score_label,
+    summarize_reactions,
+)
+from app.services.statistics_schemas import BootstrapInterval, StatisticsSummary
 
 __all__ = [
+    "BootstrapInterval",
     "EconomicCalendarIngestionResult",
     "EconomicCalendarIngestionService",
     "EventNormalizer",
@@ -34,5 +43,11 @@ __all__ = [
     "ReactionMetrics",
     "SimilarEventMatch",
     "SimilarityComponents",
+    "StatisticsCalculationError",
+    "StatisticsService",
+    "StatisticsSummary",
     "UnsupportedEconomicEventType",
+    "impact_score",
+    "impact_score_label",
+    "summarize_reactions",
 ]

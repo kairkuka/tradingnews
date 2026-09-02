@@ -1,4 +1,5 @@
 import uuid
+from collections.abc import Sequence
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -58,5 +59,26 @@ class EventReactionRepository:
             select(EventReaction)
             .where(EventReaction.event_id == event_id)
             .order_by(EventReaction.symbol, EventReaction.horizon)
+        )
+        return tuple(rows)
+
+    def list_for_events(
+        self,
+        event_ids: Sequence[uuid.UUID],
+        *,
+        symbol: str,
+        horizon: str,
+    ) -> tuple[EventReaction, ...]:
+        if not event_ids:
+            return ()
+
+        rows = self.session.scalars(
+            select(EventReaction)
+            .where(
+                EventReaction.event_id.in_(event_ids),
+                EventReaction.symbol == symbol,
+                EventReaction.horizon == horizon,
+            )
+            .order_by(EventReaction.created_at)
         )
         return tuple(rows)
