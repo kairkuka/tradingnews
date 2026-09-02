@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: newsimpact
+      POSTGRES_USER: newsimpact
+      POSTGRES_PASSWORD: newsimpact
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U newsimpact -d newsimpact"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://newsimpact:newsimpact@postgres:5432/newsimpact
+      REDIS_URL: redis://redis:6379/0
+      TIMEZONE: ${TIMEZONE:-Asia/Almaty}
+      HISTORICAL_YEARS: ${HISTORICAL_YEARS:-10}
+      MIN_SAMPLE_SIZE: ${MIN_SAMPLE_SIZE:-20}
+      STRICT_SIMILARITY: ${STRICT_SIMILARITY:-0.80}
+      RELAXED_SIMILARITY: ${RELAXED_SIMILARITY:-0.60}
+      REFERENCE_PRICE_MODE: ${REFERENCE_PRICE_MODE:-previous_close}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+volumes:
+  postgres_data:
+
