@@ -32,6 +32,20 @@ Phase 1 establishes the foundation:
 
 No production data providers are implemented in Phase 1.
 
+## Phase 2 Scope
+
+Phase 2 adds the market data foundation:
+
+- supported asset registry
+- supported OHLCV timeframe registry
+- async market data provider interface
+- OHLCV and quote validation
+- asset registry storage
+- candle upsert storage
+- market data ingestion service
+
+No vendor-specific production market data provider is implemented yet. Provider integrations must use the `MarketDataProvider` interface.
+
 ## Local Setup
 
 ```bash
@@ -86,6 +100,13 @@ docker compose up --build app
 pytest
 ruff check .
 mypy app
+```
+
+For low-disk machines, prefer temporary environments and no pip cache:
+
+```bash
+python3.11 -m venv /tmp/tradingnews-venv
+/tmp/tradingnews-venv/bin/python -m pip install --no-cache-dir --no-compile -e ".[dev]"
 ```
 
 ## Data Storage
