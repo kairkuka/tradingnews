@@ -46,6 +46,22 @@ Phase 2 adds the market data foundation:
 
 No vendor-specific production market data provider is implemented yet. Provider integrations must use the `MarketDataProvider` interface.
 
+## Phase 3 Scope
+
+Phase 3 adds the economic calendar foundation:
+
+- supported economic event registry
+- country-prefixed canonical event types
+- event directionality config
+- async economic calendar provider interface
+- provider event validation
+- economic event normalization
+- surprise, surprise percentage, and z-score calculation
+- event repository upsert and historical surprise lookup
+- economic calendar ingestion service
+
+No vendor-specific production economic calendar provider is implemented yet. Provider integrations must use the `EconomicCalendarProvider` interface.
+
 ## Local Setup
 
 ```bash
