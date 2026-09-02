@@ -4,7 +4,7 @@ from decimal import Decimal
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.models import Event
+from app.db.models import Event, EventReaction
 from app.services.event_normalizer import NormalizedEconomicEvent
 
 
@@ -78,3 +78,30 @@ class EventRepository:
         )
         return tuple(item for item in rows if item is not None)
 
+    def historical_candidates_with_reactions(
+        self,
+        *,
+        event_type: str,
+        before: datetime,
+        since: datetime,
+        symbol: str,
+    ) -> tuple[Event, ...]:
+        has_reaction_for_symbol = (
+            select(EventReaction.id)
+            .where(
+                EventReaction.event_id == Event.id,
+                EventReaction.symbol == symbol,
+            )
+            .exists()
+        )
+        rows = self.session.scalars(
+            select(Event)
+            .where(
+                Event.event_type == event_type,
+                Event.timestamp < before,
+                Event.timestamp >= since,
+                has_reaction_for_symbol,
+            )
+            .order_by(Event.timestamp.desc())
+        )
+        return tuple(rows)

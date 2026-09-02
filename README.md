@@ -76,6 +76,21 @@ Phase 4 adds the event reaction engine:
 
 The database stores fields already defined in the Phase 1 schema. Runtime-only fields such as pre-event return and path classification are kept in `ReactionMetrics` until the schema explicitly needs persisted columns.
 
+## Phase 5 Scope
+
+Phase 5 adds the historical matching engine:
+
+- structured same-event-type matching
+- symbol-specific candidate filtering through stored event reactions
+- lookback window filtering
+- weighted similarity score
+- strict threshold mode
+- relaxed threshold ladder
+- market regime, volatility regime, DXY, and US10Y context matching
+- historical confidence labels
+
+The matcher does not mix event types unless a future explicit fallback layer is added.
+
 ## Local Setup
 
 ```bash
