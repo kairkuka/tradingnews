@@ -1,0 +1,55 @@
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+build/
+dist/
+.next/
+coverage/
+
+# Logs
+logs/
+*.log
+
+# Large local data. Keep only small docs/manifests in git.
+data/*
+!data/.gitkeep
+!data/README.md
+datasets/*
+!datasets/.gitkeep
+!datasets/README.md
+downloads/
+exports/
+
+# Databases / market data / model artifacts
+*.db
+*.sqlite
+*.sqlite3
+*.parquet
+*.feather
+*.h5
+*.pkl
+*.joblib
