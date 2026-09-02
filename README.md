@@ -62,6 +62,20 @@ Phase 3 adds the economic calendar foundation:
 
 No vendor-specific production economic calendar provider is implemented yet. Provider integrations must use the `EconomicCalendarProvider` interface.
 
+## Phase 4 Scope
+
+Phase 4 adds the event reaction engine:
+
+- reaction horizon registry: `1m`, `5m`, `15m`, `30m`, `1h`, `2h`, `4h`, `1D`
+- price reference config for `previous_close`, `last_tick`, and `mid_price`
+- session config for futures and global sessions
+- candle lookups around event timestamps
+- return, MFE, MAE, volatility, volume, and pre-event movement calculation
+- algorithmic reaction path classification
+- `event_reactions` upsert storage
+
+The database stores fields already defined in the Phase 1 schema. Runtime-only fields such as pre-event return and path classification are kept in `ReactionMetrics` until the schema explicitly needs persisted columns.
+
 ## Local Setup
 
 ```bash

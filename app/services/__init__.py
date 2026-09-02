@@ -10,6 +10,8 @@ from app.services.event_normalizer import (
     UnsupportedEconomicEventType,
 )
 from app.services.market_data import MarketDataIngestionService
+from app.services.reaction_engine import ReactionCalculationError, ReactionEngine
+from app.services.reaction_metrics import ReactionMetrics
 
 __all__ = [
     "EconomicCalendarIngestionResult",
@@ -17,5 +19,8 @@ __all__ = [
     "EventNormalizer",
     "MarketDataIngestionService",
     "NormalizedEconomicEvent",
+    "ReactionCalculationError",
+    "ReactionEngine",
+    "ReactionMetrics",
     "UnsupportedEconomicEventType",
 ]

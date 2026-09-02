@@ -1,10 +1,11 @@
 from collections.abc import Iterable
+from datetime import datetime
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db.models import Candle
-from app.providers.market.schemas import OhlcvBar, validate_ohlcv_bar
+from app.providers.market.schemas import OhlcvBar, ensure_utc_timestamp, validate_ohlcv_bar
 
 
 class CandleRepository:
@@ -53,11 +54,47 @@ class CandleRepository:
         self,
         symbol: str,
         timeframe: str,
+        start: datetime | None = None,
+        end: datetime | None = None,
+        *,
+        include_start: bool = True,
+        include_end: bool = True,
     ) -> tuple[Candle, ...]:
+        conditions = [Candle.symbol == symbol, Candle.timeframe == timeframe]
+        if start is not None:
+            utc_start = ensure_utc_timestamp(start)
+            if include_start:
+                conditions.append(Candle.timestamp >= utc_start)
+            else:
+                conditions.append(Candle.timestamp > utc_start)
+        if end is not None:
+            utc_end = ensure_utc_timestamp(end)
+            if include_end:
+                conditions.append(Candle.timestamp <= utc_end)
+            else:
+                conditions.append(Candle.timestamp < utc_end)
+
         rows = self.session.scalars(
             select(Candle)
-            .where(Candle.symbol == symbol, Candle.timeframe == timeframe)
+            .where(*conditions)
             .order_by(Candle.timestamp)
         )
         return tuple(rows)
 
+    def last_before(
+        self,
+        symbol: str,
+        timeframe: str,
+        before: datetime,
+    ) -> Candle | None:
+        utc_before = ensure_utc_timestamp(before)
+        return self.session.scalars(
+            select(Candle)
+            .where(
+                Candle.symbol == symbol,
+                Candle.timeframe == timeframe,
+                Candle.timestamp < utc_before,
+            )
+            .order_by(Candle.timestamp.desc())
+            .limit(1)
+        ).first()
